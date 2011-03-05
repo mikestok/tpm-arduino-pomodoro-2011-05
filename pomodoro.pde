@@ -16,8 +16,8 @@
 #define N_STATES       3
 #define INITIAL_STATE  FREE_STATE
 
-int ledFor[]          = {  9, 10, 11 };
-int secsFor[]         = { 25,  5,  0 };
+int ledFor[]          = {          9,         10,         11 };
+int secsFor[]         = {    25 * 60,     5 * 60,     0 * 60 };
 int nextStateTimer[]  = { REST_STATE, FREE_STATE, FREE_STATE };
 int nextStateButton[] = { FREE_STATE, FREE_STATE, WORK_STATE };
 
@@ -41,7 +41,7 @@ void buttonReleased() {
 
 void setup() {
   int i;
-  
+
   // set up IO pins
   pinMode(HEARTBEAT_LED, OUTPUT);
   for (i = 0; i < N_STATES; i++) {
@@ -80,5 +80,11 @@ void loop () {
   
   for (i = 0; i < N_STATES; i++) {
     digitalWrite(ledFor[i], state == i ? HIGH : LOW);
+  }
+
+  // Display heartbeat on the "free" led if we aren't in
+  // the free state, so you can see the timer's working.
+  if (state != FREE_STATE) {
+    digitalWrite(ledFor[FREE_STATE], heartbeatOn ? HIGH : LOW);
   }
 }
